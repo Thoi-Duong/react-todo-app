@@ -9,6 +9,26 @@ const data = [
   'Los Angeles battles huge wildfires.',
 ];
 class ListToDo extends Component {
+  state = { todo: ''}
+  addToto = () => {
+    const { todo } = this.state;
+    if (!todo || todo === '' ) return
+
+    let data = {
+      name: this.props.name,
+      item: {
+        name: todo,
+        status: 'doing'
+      }
+    }
+    this.props.onAddTodo(data);
+    this.setState({todo: ''})
+  }
+
+  onChange = (e) => {
+    this.setState({todo: e.target.value})
+  }
+
   renderHeader = (name) => {
     return (
       <Card
@@ -16,8 +36,8 @@ class ListToDo extends Component {
         style={{ width: 300 }}
       >
         <Row>
-          <Col span={18}><Input placeholder="Add todo" /></Col>
-          <Col span={6}><Button>Add</Button></Col>
+          <Col span={18}><Input placeholder="Add todo" onChange={this.onChange} onPressEnter={(e) => this.addToto()} value={this.state.todo}/></Col>
+          <Col span={6}><Button onClick={() => this.addToto()}>Add</Button></Col>
         </Row>
       </Card>
     )

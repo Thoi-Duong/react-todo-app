@@ -4,9 +4,9 @@ import ListToDo from '../../components/ListToDo';
 import { Button, List, Layout, Form } from 'antd';
 import TodoForm from './TodoForm'
 import {
-  addNewList
+  addNewList,
+  addNewTodo
 } from './action';
-import { map } from 'rsvp';
 
 const { Content } = Layout;
 
@@ -58,7 +58,7 @@ class Home extends Component {
             header={this.renderHeader()}
             bordered
             dataSource={this.props.todos}
-            renderItem={item => (<List.Item><ListToDo name={item.name} note={item.note} items={item.list} /></List.Item>)}
+            renderItem={item => (<List.Item><ListToDo name={item.name} note={item.note} items={item.list} onAddTodo={this.props.addNewTodo} /></List.Item>)}
           />
           <TodoForm
             wrappedComponentRef={this.saveFormRef}
@@ -77,7 +77,7 @@ function mapStateToProps(state) {
     todos: state.home.todos
   }
 }
-const mapDispatchToProps = { addNewList };
+const mapDispatchToProps = { addNewList, addNewTodo };
 // function mapDispatchToProps() {
 //   return {
 //     addNewList
