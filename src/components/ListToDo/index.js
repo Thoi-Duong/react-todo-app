@@ -9,14 +9,14 @@ const data = [
   'Los Angeles battles huge wildfires.',
 ];
 class ListToDo extends Component {
-  renderHeader = () => {
+  renderHeader = (name) => {
     return (
       <Card
-        title="Well done!"
+        title={name}
         style={{ width: 300 }}
       >
         <Row>
-          <Col span={18}><Input placeholder="Basic usage" /></Col>
+          <Col span={18}><Input placeholder="Add todo" /></Col>
           <Col span={6}><Button>Add</Button></Col>
         </Row>
       </Card>
@@ -26,11 +26,11 @@ class ListToDo extends Component {
     return (
       <List
         size="small"
-        header={this.renderHeader()}
-        footer={<div>Footer</div>}
+        header={this.renderHeader(this.props.name)}
+        footer={<div>{this.props.note}</div>}
         bordered
-        dataSource={data}
-        renderItem={item => (<List.Item> <ItemToDo name={item}/></List.Item>)}
+        dataSource={this.props.items}
+        renderItem={item => (<List.Item> <ItemToDo name={item.name} status={item.status}/></List.Item>)}
       />
     );
   }

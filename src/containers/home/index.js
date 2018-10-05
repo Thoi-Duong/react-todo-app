@@ -1,61 +1,50 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ListToDo from '../../components/ListToDo';
-import { Modal, Button, Input, List, Layout } from 'antd';
+import { Button, List, Layout, Form } from 'antd';
+import TodoForm from './TodoForm'
+import {
+  addNewList
+} from './action';
+import { map } from 'rsvp';
+
 const { Content } = Layout;
 
-const data = [
-  'Racing car sprays burning fuel into crowd.',
-  'Japanese princess to wed commoner.',
-  'Australian walks 100km after outback crash.',
-  'Man charged over missing wedding girl.',
-  'Los Angeles battles huge wildfires.',
-  'Los Angeles battles huge wildfires.',
-  'Los Angeles battles huge wildfires.',
-];
 
 class Home extends Component {
-  state = { visible: false }
+  state = {
+    visible: false,
+  };
 
   showModal = () => {
-    this.setState({
-      visible: true,
+    this.setState({ visible: true });
+  }
+
+  handleCancel = () => {
+    this.setState({ visible: false });
+  }
+
+  handleCreate = () => {
+    const form = this.formRef.props.form;
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      console.log('Received values of form: ', values);
+      form.resetFields();
+      this.props.addNewList(values)
+      this.setState({ visible: false });
     });
   }
 
-  handleOk = (e) => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
-  }
-
-  handleCancel = (e) => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
-  }
-
-  onChange = (val) => {
-    console.log(val);
+  saveFormRef = (formRef) => {
+    this.formRef = formRef;
   }
 
   renderHeader = () => {
     return (
       <div>
-        <Button type="primary" onClick={this.showModal}>
-          Add List
-        </Button>
-        <Modal
-          title="Basic Modal"
-          visible={this.state.visible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-        >
-          <p>Put your list name here...</p>
-          <Input placeholder="Basic usage" />
-        </Modal>
+        <Button type="primary" onClick={this.showModal}>New Todo List</Button>
       </div>
     );
   }
@@ -68,8 +57,14 @@ class Home extends Component {
             grid={{ gutter: 16, column: 3 }}
             header={this.renderHeader()}
             bordered
-            dataSource={data}
-            renderItem={item => (<List.Item><ListToDo/></List.Item>)}
+            dataSource={this.props.todos}
+            renderItem={item => (<List.Item><ListToDo name={item.name} note={item.note} items={item.list} /></List.Item>)}
+          />
+          <TodoForm
+            wrappedComponentRef={this.saveFormRef}
+            visible={this.state.visible}
+            onCancel={this.handleCancel}
+            onCreate={this.handleCreate}
           />
         </Content>
       </Layout>
@@ -77,6 +72,16 @@ class Home extends Component {
   }
 }
 
-function mapStateToProps(state) { return {}; }
+function mapStateToProps(state) { 
+  return {
+    todos: state.home.todos
+  }
+}
+const mapDispatchToProps = { addNewList };
+// function mapDispatchToProps() {
+//   return {
+//     addNewList
+//   }
+// }
 
-export default connect(mapStateToProps)(Home)
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
