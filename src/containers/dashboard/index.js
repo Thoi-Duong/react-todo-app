@@ -1,6 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Layout, Menu, Icon, Card } from 'antd';
+import { connect } from 'react-redux'
+
 import Home from '../home';
 import About from '../about';
 
@@ -45,4 +47,6 @@ const DashBoard = (props) => (
   </Router>
 );
 
-export default DashBoard;
+function mapStateToProps(state) { return {}; }
+
+export default connect(mapStateToProps)(DashBoard)

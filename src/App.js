@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { Provider } from 'react-redux';
+import configureStore from './configureStore';
+
 import './App.css';
-import { Router } from 'react-router-dom';
 import DashBoard from './containers/dashboard';
+
+const store = configureStore();
 class App extends Component {
   render() {
     return (
-      <DashBoard/>
+      <Provider store={store}>
+        <DashBoard/>
+      </Provider>
     );
   }
 }

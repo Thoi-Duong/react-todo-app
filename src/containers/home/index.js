@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import ListToDo from '../../components/ListToDo';
 import { Modal, Button, Input, List, Layout } from 'antd';
 const { Content } = Layout;
@@ -76,4 +77,6 @@ class Home extends Component {
   }
 }
 
-export default Home;
+function mapStateToProps(state) { return {}; }
+
+export default connect(mapStateToProps)(Home)
